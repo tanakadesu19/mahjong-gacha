@@ -46,10 +46,25 @@ const gachaButton = document.getElementById("gachaButton");
 const gachaCountElement = document.getElementById("gachaCount");
 const historyList = document.getElementById("historyList");
 
-let gachaCount = 0;
+const collectionList =
+    document.getElementById("collectionList");
+
+const collectionCountElement =
+    document.getElementById("collectionCount");
+
+let gachaCount =
+    Number(localStorage.getItem("mahjongGachaCount")) || 0;
+
+gachaCountElement.textContent = gachaCount;
+
 
 // ガチャ履歴
 let history = [];
+
+const savedCollection =
+    JSON.parse(localStorage.getItem("mahjongCollection")) || [];
+
+const collectedTiles = new Set(savedCollection);
 
 gachaButton.addEventListener("click", function () {
     const randomIndex = Math.floor(
@@ -68,9 +83,20 @@ gachaButton.addEventListener("click", function () {
     tileElement.classList.add("gacha-animation");
 
     gachaCount++;
+    
     gachaCountElement.textContent = gachaCount;
 
+    localStorage.setItem(
+        "mahjongGachaCount",
+        gachaCount
+    );
+
+
     updateHistory(selectedTile);
+
+    collectedTiles.add(randomIndex);
+    saveCollection();
+    updateCollection();
 });
 
 function updateHistory(selectedTile) {
@@ -99,3 +125,54 @@ function updateHistory(selectedTile) {
         historyList.appendChild(li);
     });
 }
+
+//図鑑を表示する
+function updateCollection() {
+    collectionList.innerHTML = "";
+
+    mahjongTiles.forEach(function (tile, index) {
+        const item = document.createElement("div");
+
+        item.classList.add("collection-item");
+
+        const isCollected = collectedTiles.has(index);
+
+        if (!isCollected) {
+            item.classList.add("locked");
+        }
+
+        const symbol = document.createElement("span");
+        symbol.classList.add("collection-symbol");
+
+        const name = document.createElement("span");
+        name.classList.add("collection-name");
+
+        if (isCollected) {
+            symbol.textContent = tile.symbol;
+            name.textContent = tile.name;
+        } else {
+            symbol.textContent = "？";
+            name.textContent = "未取得";
+        }
+
+        item.appendChild(symbol);
+        item.appendChild(name);
+
+        collectionList.appendChild(item);
+    });
+
+    collectionCountElement.textContent =
+        collectedTiles.size;
+}
+
+//図鑑の保存
+function saveCollection() {
+    const collectionArray = Array.from(collectedTiles);
+
+    localStorage.setItem(
+        "mahjongCollection",
+        JSON.stringify(collectionArray)
+    );
+}
+
+updateCollection();

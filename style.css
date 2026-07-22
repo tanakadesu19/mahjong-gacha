@@ -219,3 +219,69 @@ h1 {
         font-size: 21px;
     }
 }
+
+/*図鑑*/
+.collection-area {
+    margin-top: 28px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.92);
+    border-radius: 18px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.collection-area h2 {
+    margin: 0 0 10px;
+    color: #174c33;
+    font-size: 22px;
+}
+
+.collection-count {
+    margin: 0 0 18px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.collection-list {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(65px, 1fr)
+    );
+    gap: 10px;
+}
+
+.collection-item {
+    display: flex;
+    min-height: 88px;
+    padding: 7px 4px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #eee7c9
+        );
+    border: 2px solid #cbbd85;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #8e835e;
+}
+
+.collection-item.locked {
+    color: #999;
+    background: #d8d8d8;
+    border-color: #aaa;
+    box-shadow: 0 4px 0 #888;
+}
+
+.collection-symbol {
+    font-size: 38px;
+    line-height: 1;
+}
+
+.collection-name {
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
