@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>麻雀ガチャ</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main class="container">
+        <h1>🀄 麻雀ガチャ</h1>
+
+        <section class="result-area">
+            <p class="result-label">ガチャ結果</p>
+
+            <div id="tile" class="tile">？</div>
+
+            <p id="tileName" class="tile-name">
+                ガチャを引いてください
+            </p>
+        </section>
+
+        <button id="gachaButton" class="gacha-button">
+            ガチャを引く
+        </button>
+
+        <p class="count-text">
+            ガチャ回数：
+            <span id="gachaCount">0</span>
+            回
+        </p>
+
+        <hr>
+
+        <section class="history-area">
+            <h2>履歴</h2>
+
+            <ul id="historyList">
+            </ul>
+        </section>
+        
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
