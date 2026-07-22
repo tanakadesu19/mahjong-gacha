@@ -47,6 +47,11 @@ const gachaCountElement = document.getElementById("gachaCount");
 const rarityElement = document.getElementById("rarity");
 const historyList = document.getElementById("historyList");
 
+const tileModal = document.getElementById("tileModal");
+const modalRarityList = document.getElementById("modalRarityList");
+const closeModalButton = document.getElementById("closeModalButton");
+const modalTileName = document.getElementById("modalTileName");
+
 const collectionList =
     document.getElementById("collectionList");
 
@@ -151,7 +156,11 @@ function updateCollection() {
 
         const isCollected = collectedTiles.has(index);
 
-        if (!isCollected) {
+        if (isCollected) {
+            item.addEventListener("click", () => {
+                openTileModal(index);
+            });
+        } else {
             item.classList.add("locked");
         }
 
@@ -282,3 +291,82 @@ function updateRarityDisplay(rarity) {
         `tile-${rarity.toLowerCase()}`
     );
 }
+
+//詳細画面を開く関数
+function openTileModal(tileIndex) {
+    const tile = mahjongTiles[tileIndex];
+
+    const obtainedRarities =
+        rarityCollection[tileIndex] || [];
+
+    modalTileName.textContent = tile.name;
+    modalRarityList.innerHTML = "";
+
+    const rarityData = [
+        {
+            id: "N",
+            label: "ノーマル",
+            className: "tile-n"
+        },
+        {
+            id: "R",
+            label: "シルバー",
+            className: "tile-r"
+        },
+        {
+            id: "SR",
+            label: "ゴールド",
+            className: "tile-sr"
+        },
+        {
+            id: "SSR",
+            label: "レインボー",
+            className: "tile-ssr"
+        }
+    ];
+
+    rarityData.forEach(function (rarity) {
+        if (!obtainedRarities.includes(rarity.id)) {
+            return;
+        }
+
+        const rarityItem = document.createElement("div");
+        rarityItem.classList.add("modal-tile-item");
+
+        const tileCard = document.createElement("div");
+
+        tileCard.classList.add(
+            "modal-color-tile",
+            rarity.className
+        );
+
+        tileCard.textContent = tile.symbol;
+
+        const rarityName = document.createElement("p");
+        rarityName.classList.add("modal-rarity-name");
+        rarityName.textContent = rarity.label;
+
+        rarityItem.appendChild(tileCard);
+        rarityItem.appendChild(rarityName);
+
+        modalRarityList.appendChild(rarityItem);
+    });
+
+    tileModal.classList.add("open");
+}
+
+closeModalButton.addEventListener("click", () => {
+    tileModal.classList.remove("open");
+});
+
+tileModal.addEventListener("click", (event) => {
+    if (event.target === tileModal) {
+        tileModal.classList.remove("open");
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        tileModal.classList.remove("open");
+    }
+});
