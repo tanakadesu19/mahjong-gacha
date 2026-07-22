@@ -67,6 +67,13 @@ const savedCollection =
 
 const collectedTiles = new Set(savedCollection);
 
+const savedRarityCollection =
+    JSON.parse(
+        localStorage.getItem("mahjongRarityCollection")
+    ) || {};
+
+const rarityCollection = savedRarityCollection;
+
 gachaButton.addEventListener("click", function () {
     const randomIndex = Math.floor(
         Math.random() * mahjongTiles.length
@@ -100,6 +107,9 @@ gachaButton.addEventListener("click", function () {
 
     collectedTiles.add(randomIndex);
     saveCollection();
+
+    addRarityToCollection(randomIndex, rarity);
+
     updateCollection();
 });
 
@@ -145,6 +155,30 @@ function updateCollection() {
             item.classList.add("locked");
         }
 
+        const rarityMarks = document.createElement("div");
+        rarityMarks.classList.add("rarity-marks");
+
+        const rarities = ["N", "R", "SR", "SSR"];
+
+        const obtainedRarities =
+            rarityCollection[index] || [];
+
+        rarities.forEach(function (rarity) {
+            const mark = document.createElement("span");
+
+            mark.classList.add(
+                "rarity-mark",
+                `mark-${rarity.toLowerCase()}`
+            );
+
+
+            if (obtainedRarities.includes(rarity)) {
+                mark.classList.add("obtained");
+            }
+
+            rarityMarks.appendChild(mark);
+        });
+
         const symbol = document.createElement("span");
         symbol.classList.add("collection-symbol");
 
@@ -159,6 +193,7 @@ function updateCollection() {
             name.textContent = "未取得";
         }
 
+        item.appendChild(rarityMarks);
         item.appendChild(symbol);
         item.appendChild(name);
 
@@ -177,6 +212,27 @@ function saveCollection() {
         "mahjongCollection",
         JSON.stringify(collectionArray)
     );
+}
+
+//レア度保存用の関数
+function saveRarityCollection() {
+    localStorage.setItem(
+        "mahjongRarityCollection",
+        JSON.stringify(rarityCollection)
+    );
+}
+
+//取得したレア度を登録する関数
+function addRarityToCollection(tileIndex, rarity) {
+    if (!rarityCollection[tileIndex]) {
+        rarityCollection[tileIndex] = [];
+    }
+
+    if (!rarityCollection[tileIndex].includes(rarity)) {
+        rarityCollection[tileIndex].push(rarity);
+    }
+
+    saveRarityCollection();
 }
 
 updateCollection();
