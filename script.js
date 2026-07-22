@@ -44,6 +44,7 @@ const tileElement = document.getElementById("tile");
 const tileNameElement = document.getElementById("tileName");
 const gachaButton = document.getElementById("gachaButton");
 const gachaCountElement = document.getElementById("gachaCount");
+const rarityElement = document.getElementById("rarity");
 const historyList = document.getElementById("historyList");
 
 const collectionList =
@@ -72,6 +73,7 @@ gachaButton.addEventListener("click", function () {
     );
 
     const selectedTile = mahjongTiles[randomIndex];
+    const rarity = getRarity();
 
     tileElement.classList.remove("gacha-animation");
 
@@ -80,10 +82,12 @@ gachaButton.addEventListener("click", function () {
     tileElement.textContent = selectedTile.symbol;
     tileNameElement.textContent = selectedTile.name;
 
+    updateRarityDisplay(rarity);
+
     tileElement.classList.add("gacha-animation");
 
     gachaCount++;
-    
+
     gachaCountElement.textContent = gachaCount;
 
     localStorage.setItem(
@@ -176,3 +180,49 @@ function saveCollection() {
 }
 
 updateCollection();
+
+//レア度を決める関数
+function getRarity() {
+    const randomNumber = Math.random() * 100;
+
+    if (randomNumber < 1.8) {
+        return "SSR";
+    }
+
+    if (randomNumber < 10) {
+        return "SR";
+    }
+
+    if (randomNumber < 30) {
+        return "R";
+    }
+
+    return "N";
+}
+
+//レア度の見た目を変える
+function updateRarityDisplay(rarity) {
+    rarityElement.textContent = rarity;
+
+    rarityElement.classList.remove(
+        "rarity-n",
+        "rarity-r",
+        "rarity-sr",
+        "rarity-ssr"
+    );
+
+    rarityElement.classList.add(
+        `rarity-${rarity.toLowerCase()}`
+    );
+
+    tileElement.classList.remove(
+        "tile-n",
+        "tile-r",
+        "tile-sr",
+        "tile-ssr"
+    );
+
+    tileElement.classList.add(
+        `tile-${rarity.toLowerCase()}`
+    );
+}

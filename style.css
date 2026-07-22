@@ -285,3 +285,105 @@ h1 {
     font-size: 12px;
     font-weight: bold;
 }
+
+
+/*牌のレア度*/
+.rarity {
+    display: inline-block;
+    min-width: 55px;
+    margin: 8px 0 18px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* 通常 */
+.rarity-n {
+    color: #333;
+    background-color: #dddddd;
+}
+
+/* 銀 */
+.rarity-r {
+    color: #333;
+    background:
+        linear-gradient(
+            135deg,
+            #eeeeee,
+            #aeb6bf
+        );
+}
+
+/* 金 */
+.rarity-sr {
+    color: #5a4200;
+    background:
+        linear-gradient(
+            135deg,
+            #fff2a8,
+            #e0a800
+        );
+}
+
+/* 虹 */
+.rarity-ssr {
+    color: #ffffff;
+    background:
+        linear-gradient(
+            135deg,
+            #ff5f6d,
+            #ffc371,
+            #47cf73,
+            #4d9fff,
+            #aa6cff
+        );
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+
+/* 通常牌 */
+.tile.tile-n {
+    background: linear-gradient(
+        145deg,
+        #ffffff,
+        #eee7c9
+    );
+}
+
+/* 銀色牌 */
+.tile.tile-r {
+    background: linear-gradient(
+        145deg,
+        #ffffff,
+        #9da6ad
+    );
+    border-color: #bfc5ca;
+    box-shadow: 0 7px 0 #737b81;
+}
+
+/* 金色牌 */
+.tile.tile-sr {
+    background: linear-gradient(
+        145deg,
+        #fff7b8,
+        #e0a800
+    );
+    border-color: #ffd54f;
+    box-shadow: 0 7px 0 #9c7500;
+}
+
+/* 虹色牌 */
+.tile.tile-ssr {
+    background: linear-gradient(
+        135deg,
+        #ff8a8a,
+        #ffe082,
+        #81e6a1,
+        #80bfff,
+        #c49cff
+    );
+    border-color: #ffffff;
+    box-shadow: 0 7px 0 #765a9d;
+}
