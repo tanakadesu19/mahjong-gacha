@@ -1,3 +1,5 @@
+const MAX_HISTORY = 10;
+
 const mahjongTiles = [
     { symbol: "🀇", name: "一萬" },
     { symbol: "🀈", name: "二萬" },
@@ -44,8 +46,9 @@ const gachaButton = document.getElementById("gachaButton");
 const gachaCountElement = document.getElementById("gachaCount");
 const historyList = document.getElementById("historyList");
 
-
 let gachaCount = 0;
+
+// ガチャ履歴
 let history = [];
 
 gachaButton.addEventListener("click", function () {
@@ -55,17 +58,25 @@ gachaButton.addEventListener("click", function () {
 
     const selectedTile = mahjongTiles[randomIndex];
 
+    tileElement.classList.remove("gacha-animation");
+
+    void tileElement.offsetWidth;
+
     tileElement.textContent = selectedTile.symbol;
     tileNameElement.textContent = selectedTile.name;
+
+    tileElement.classList.add("gacha-animation");
 
     gachaCount++;
     gachaCountElement.textContent = gachaCount;
 
-    history.unshift(
-        `${selectedTile.symbol} ${selectedTile.name}`
-    );
+    updateHistory(selectedTile);
+});
 
-    if (history.length > 10) {
+function updateHistory(selectedTile) {
+    history.unshift(selectedTile);
+
+    if (history.length > MAX_HISTORY) {
         history.pop();
     }
 
@@ -73,7 +84,18 @@ gachaButton.addEventListener("click", function () {
 
     history.forEach(function (tile) {
         const li = document.createElement("li");
-        li.textContent = tile;
+
+        const symbol = document.createElement("span");
+        symbol.classList.add("history-symbol");
+        symbol.textContent = tile.symbol;
+
+        const name = document.createElement("span");
+        name.classList.add("history-name");
+        name.textContent = tile.name;
+
+        li.appendChild(symbol);
+        li.appendChild(name);
+
         historyList.appendChild(li);
     });
-});
+}

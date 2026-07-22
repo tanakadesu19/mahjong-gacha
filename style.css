@@ -9,111 +9,213 @@ body {
         "Yu Gothic",
         "Meiryo",
         sans-serif;
-    background-color: #f2f0e8;
     color: #222;
+    background:
+        radial-gradient(
+            circle at center,
+            #238154 0%,
+            #125637 65%,
+            #0b3d28 100%
+        );
 }
 
 .container {
-    width: min(90%, 500px);
+    width: min(92%, 520px);
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 35px 18px 50px;
     text-align: center;
 }
 
 h1 {
-    margin-bottom: 32px;
-    font-size: 36px;
+    margin: 0 0 28px;
+    color: #ffffff;
+    font-size: clamp(30px, 8vw, 42px);
+    text-shadow:
+        0 3px 0 #0a3523,
+        0 5px 10px rgba(0, 0, 0, 0.35);
 }
 
 .result-area {
-    padding: 28px 20px;
-    background-color: white;
-    border: 3px solid #1d6b42;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    padding: 25px 20px 28px;
+    background-color: rgba(255, 255, 255, 0.96);
+    border: 4px solid #d8b84c;
+    border-radius: 22px;
+    box-shadow:
+        0 12px 0 #8d7124,
+        0 18px 30px rgba(0, 0, 0, 0.3);
 }
 
 .result-label {
-    margin-top: 0;
+    margin: 0;
+    color: #666;
+    font-size: 17px;
     font-weight: bold;
-    color: #555;
 }
 
 .tile {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 130px;
-    height: 170px;
-    margin: 20px auto;
-    background-color: #fffdf0;
-    border: 4px solid #d4c89b;
-    border-radius: 12px;
-    box-shadow: 0 6px 0 #9b916d;
-    font-size: 90px;
+    width: 135px;
+    height: 180px;
+    margin: 22px auto;
+    overflow: hidden;
+    color: #111;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #fffdf0 70%,
+            #e8e0bc 100%
+        );
+    border: 3px solid #d2c58f;
+    border-radius: 13px;
+    box-shadow:
+        inset 3px 3px 4px rgba(255, 255, 255, 0.9),
+        inset -4px -5px 5px rgba(166, 153, 104, 0.25),
+        0 8px 0 #8e835e,
+        0 12px 15px rgba(0, 0, 0, 0.25);
+    font-size: 92px;
+}
+
+.tile.gacha-animation {
+    animation: drawTile 0.35s ease;
 }
 
 .tile-name {
-    min-height: 32px;
-    margin-bottom: 0;
-    font-size: 24px;
+    min-height: 34px;
+    margin: 0;
+    font-size: 25px;
     font-weight: bold;
 }
 
 .gacha-button {
     width: 100%;
-    margin-top: 28px;
-    padding: 18px;
-    border: none;
-    border-radius: 14px;
-    background-color: #1d6b42;
-    color: white;
+    margin-top: 34px;
+    padding: 19px 20px;
+    border: 3px solid #f4dd74;
+    border-radius: 16px;
+    color: #ffffff;
+    background:
+        linear-gradient(
+            180deg,
+            #e44747 0%,
+            #b81717 100%
+        );
+    box-shadow:
+        0 7px 0 #741010,
+        0 12px 18px rgba(0, 0, 0, 0.3);
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
     transition:
         transform 0.1s,
-        background-color 0.2s;
+        box-shadow 0.1s,
+        filter 0.2s;
 }
 
 .gacha-button:hover {
-    background-color: #155333;
+    filter: brightness(1.08);
 }
 
 .gacha-button:active {
-    transform: translateY(3px);
+    transform: translateY(5px);
+    box-shadow:
+        0 2px 0 #741010,
+        0 5px 10px rgba(0, 0, 0, 0.25);
 }
 
 .count-text {
-    margin-top: 24px;
-    font-size: 20px;
-}
-
-/*履歴*/
-hr {
     margin: 30px 0;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.45);
 }
 
 .history-area {
-    text-align: left;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.92);
+    border-radius: 18px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
 }
 
 .history-area h2 {
-    text-align: center;
+    margin: 0 0 18px;
+    color: #174c33;
+    font-size: 22px;
 }
 
-#historyList {
-    list-style: none;
-    padding: 0;
+.history-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    min-height: 78px;
     margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
-#historyList li {
-    padding: 10px;
-    margin-bottom: 8px;
-    background: white;
-    border-radius: 10px;
-    border-left: 6px solid #1d6b42;
-    font-size: 20px;
+.history-list li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    min-height: 72px;
+    padding: 5px;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #eee7c9
+        );
+    border: 2px solid #cbbd85;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #8e835e;
+    font-size: 13px;
+    font-weight: bold;
 }
 
+.history-symbol {
+    font-size: 36px;
+    line-height: 1;
+}
+
+.history-name {
+    margin-top: 4px;
+    font-size: 12px;
+}
+
+@keyframes drawTile {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px) rotate(-8deg) scale(0.7);
+    }
+
+    60% {
+        transform: translateY(4px) rotate(3deg) scale(1.08);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(0) scale(1);
+    }
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding-top: 25px;
+    }
+
+    .tile {
+        width: 120px;
+        height: 160px;
+        font-size: 82px;
+    }
+
+    .gacha-button {
+        font-size: 21px;
+    }
+}
