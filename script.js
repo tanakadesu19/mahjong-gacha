@@ -52,11 +52,11 @@ const modalRarityList = document.getElementById("modalRarityList");
 const closeModalButton = document.getElementById("closeModalButton");
 const modalTileName = document.getElementById("modalTileName");
 
-const collectionList =
-    document.getElementById("collectionList");
+const collectionList = document.getElementById("collectionList");
 
-const collectionCountElement =
-    document.getElementById("collectionCount");
+const collectionCountElement = document.getElementById("collectionCount");
+
+const flashEffect = document.getElementById("flashEffect");
 
 let gachaCount =
     Number(localStorage.getItem("mahjongGachaCount")) || 0;
@@ -95,6 +95,8 @@ gachaButton.addEventListener("click", function () {
     tileNameElement.textContent = selectedTile.name;
 
     updateRarityDisplay(rarity);
+
+    playFlash(rarity);
 
     tileElement.classList.add("gacha-animation");
 
@@ -370,3 +372,25 @@ document.addEventListener("keydown", (event) => {
         tileModal.classList.remove("open");
     }
 });
+
+function playFlash(rarity) {
+
+    flashEffect.className = "flash-effect";
+
+    if (rarity === "R") {
+        flashEffect.classList.add("flash-silver");
+    }
+
+    if (rarity === "SR") {
+        flashEffect.classList.add("flash-gold");
+    }
+
+    if (rarity === "SSR") {
+        flashEffect.classList.add("flash-rainbow");
+    }
+
+    setTimeout(() => {
+        flashEffect.className = "flash-effect";
+    }, 900);
+
+}

@@ -790,6 +790,66 @@ h1 {
 }
 
 
+/* =========================
+   背景フラッシュ
+========================= */
+
+.flash-effect {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 999;
+}
+
+/* R */
+.flash-silver {
+    background:
+        radial-gradient(circle,
+        rgba(255,255,255,.9),
+        rgba(180,190,200,.4),
+        transparent);
+    animation: flashEffect .45s ease;
+}
+
+/* SR */
+.flash-gold {
+    background:
+        radial-gradient(circle,
+        rgba(255,245,180,.95),
+        rgba(255,200,0,.45),
+        transparent);
+    animation: flashEffect .6s ease;
+}
+
+/* SSR */
+.flash-rainbow {
+    background:
+        radial-gradient(circle,
+        rgba(255,255,255,.95),
+        rgba(255,90,120,.35),
+        rgba(255,210,90,.35),
+        rgba(80,255,150,.35),
+        rgba(90,170,255,.35),
+        transparent);
+    animation: flashEffect .9s ease;
+}
+
+@keyframes flashEffect {
+
+    0% {
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+
+}
 
 
 
