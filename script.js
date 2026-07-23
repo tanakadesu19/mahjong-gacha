@@ -97,6 +97,7 @@ gachaButton.addEventListener("click", function () {
     updateRarityDisplay(rarity);
 
     playFlash(rarity);
+    playRaritySound(rarity);
 
     tileElement.classList.add("gacha-animation");
 
@@ -252,7 +253,7 @@ updateCollection();
 function getRarity() {
     const randomNumber = Math.random() * 100;
 
-    if (randomNumber < 1.8) {
+    if (randomNumber < 3) {
         return "SSR";
     }
 
@@ -393,4 +394,139 @@ function playFlash(rarity) {
         flashEffect.className = "flash-effect";
     }, 900);
 
+}
+
+//レア度別の効果音の実装
+let audioContext = null;
+
+function getAudioContext() {
+    if (!audioContext) {
+        audioContext = new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
+    }
+
+    return audioContext;
+}
+
+function playTone({
+    frequency,
+    startTime,
+    duration,
+    type = "sine",
+    volume = 0.12
+}) {
+    const context = getAudioContext();
+
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(
+        frequency,
+        startTime
+    );
+
+    gainNode.gain.setValueAtTime(
+        volume,
+        startTime
+    );
+
+    gainNode.gain.exponentialRampToValueAtTime(
+        0.001,
+        startTime + duration
+    );
+
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    oscillator.start(startTime);
+    oscillator.stop(startTime + duration);
+}
+
+function playRaritySound(rarity) {
+    const context = getAudioContext();
+    const now = context.currentTime;
+
+    if (context.state === "suspended") {
+        context.resume();
+    }
+
+    if (rarity === "N") {
+        playTone({
+            frequency: 330,
+            startTime: now,
+            duration: 0.08,
+            type: "triangle",
+            volume: 0.08
+        });
+    }
+
+    if (rarity === "R") {
+        playTone({
+            frequency: 720,
+            startTime: now,
+            duration: 0.18,
+            type: "triangle",
+            volume: 0.10
+        });
+    }
+
+    if (rarity === "SR") {
+        playTone({
+            frequency: 660,
+            startTime: now,
+            duration: 0.15,
+            type: "triangle",
+            volume: 0.10
+        });
+
+        playTone({
+            frequency: 880,
+            startTime: now + 0.08,
+            duration: 0.18,
+            type: "triangle",
+            volume: 0.12
+        });
+
+        playTone({
+            frequency: 1175,
+            startTime: now + 0.18,
+            duration: 0.28,
+            type: "sine",
+            volume: 0.14
+        });
+    }
+
+    if (rarity === "SSR") {
+        const notes = [
+            392,
+            523,
+            659,
+            784,
+            1047,
+            1319
+        ];
+
+        notes.forEach((frequency, index) => {
+
+            playTone({
+                frequency,
+                startTime: now + index * 0.08,
+                duration: 0.35,
+                type: index < 4 ? "triangle" : "sine",
+                volume: 0.13
+            });
+
+        });
+
+        playTone({
+            frequency: 1760,
+            startTime: now + 0.55,
+            duration: 0.6,
+            type: "sine",
+            volume: 0.15
+        });
+    }
 }
