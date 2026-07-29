@@ -43,6 +43,10 @@ const mahjongTiles = [
 const tileElement = document.getElementById("tile");
 const tileNameElement = document.getElementById("tileName");
 const gachaButton = document.getElementById("gachaButton");
+
+const tenGachaButton = document.getElementById("tenGachaButton");
+const tenGachaResult = document.getElementById("tenGachaResult");
+
 const gachaCountElement = document.getElementById("gachaCount");
 const rarityElement = document.getElementById("rarity");
 const historyList = document.getElementById("historyList");
@@ -57,6 +61,8 @@ const collectionList = document.getElementById("collectionList");
 const collectionCountElement = document.getElementById("collectionCount");
 
 const flashEffect = document.getElementById("flashEffect");
+
+const singleGachaResult = document.getElementById("singleGachaResult");
 
 let gachaCount =
     Number(localStorage.getItem("mahjongGachaCount")) || 0;
@@ -80,12 +86,18 @@ const savedRarityCollection =
 const rarityCollection = savedRarityCollection;
 
 gachaButton.addEventListener("click", function () {
-    const randomIndex = Math.floor(
-        Math.random() * mahjongTiles.length
-    );
+    drawSingleGacha();
+});
 
-    const selectedTile = mahjongTiles[randomIndex];
-    const rarity = getRarity();
+function drawSingleGacha() {
+
+    singleGachaResult.style.display = "block";
+    tenGachaResult.style.display = "none";
+
+    const result = drawGachaResult();
+
+    const selectedTile = result.tile;
+    const rarity = result.rarity;
 
     tileElement.classList.remove("gacha-animation");
 
@@ -100,6 +112,15 @@ gachaButton.addEventListener("click", function () {
     playRaritySound(rarity);
 
     tileElement.classList.add("gacha-animation");
+}
+
+function drawGachaResult() {
+    const randomIndex = Math.floor(
+        Math.random() * mahjongTiles.length
+    );
+
+    const selectedTile = mahjongTiles[randomIndex];
+    const rarity = getRarity();
 
     gachaCount++;
 
@@ -110,16 +131,128 @@ gachaButton.addEventListener("click", function () {
         gachaCount
     );
 
-
     updateHistory(selectedTile);
 
     collectedTiles.add(randomIndex);
     saveCollection();
 
-    addRarityToCollection(randomIndex, rarity);
+    addRarityToCollection(
+        randomIndex,
+        rarity
+    );
 
     updateCollection();
-});
+
+    return {
+        tile: selectedTile,
+        rarity: rarity
+    };
+}
+
+tenGachaButton.addEventListener(
+    "click",
+    function () {
+        drawTenGacha();
+    }
+);
+
+async function drawTenGacha() {
+    tenGachaButton.disabled = true;
+    gachaButton.disabled = true;
+
+    singleGachaResult.style.display = "none";
+    tenGachaResult.style.display = "grid";
+
+    tenGachaResult.innerHTML = "";
+
+    let highestRarity = "N";
+
+    for (let i = 0; i < 10; i++) {
+        const result = drawGachaResult();
+
+        const item = createTenGachaItem(
+            result.tile,
+            result.rarity
+        );
+
+        tenGachaResult.appendChild(item);
+
+        void item.offsetWidth;
+
+        item.classList.add("show");
+
+        highestRarity = compareRarity(
+            highestRarity,
+            result.rarity
+        );
+
+        await wait(180);
+    }
+
+    playFlash(highestRarity);
+    playRaritySound(highestRarity);
+
+    tenGachaButton.disabled = false;
+    gachaButton.disabled = false;
+}
+
+function createTenGachaItem(tile, rarity) {
+    const item = document.createElement("div");
+
+    item.classList.add("ten-gacha-item");
+
+    const tileCard =
+        document.createElement("div");
+
+    tileCard.classList.add(
+        "ten-gacha-tile",
+        `tile-${rarity.toLowerCase()}`
+    );
+
+    tileCard.textContent = tile.symbol;
+
+    const rarityText =
+        document.createElement("p");
+
+    rarityText.classList.add(
+        "ten-gacha-rarity",
+        `rarity-${rarity.toLowerCase()}`
+    );
+
+    rarityText.textContent = rarity;
+
+    item.appendChild(tileCard);
+    item.appendChild(rarityText);
+
+    return item;
+}
+
+function compareRarity(
+    currentRarity,
+    newRarity
+) {
+    const rarityOrder = {
+        N: 1,
+        R: 2,
+        SR: 3,
+        SSR: 4
+    };
+
+    if (
+        rarityOrder[newRarity] >
+        rarityOrder[currentRarity]
+    ) {
+        return newRarity;
+    }
+
+    return currentRarity;
+}
+
+function wait(milliseconds) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, milliseconds);
+    });
+}
 
 function updateHistory(selectedTile) {
     history.unshift(selectedTile);

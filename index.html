@@ -22,18 +22,32 @@
         <section class="result-area">
             <p class="result-label">ガチャ結果</p>
 
-            <div id="tile" class="tile">？</div>
+            <div id="singleGachaResult">
+                <div id="tile" class="tile">？</div>
 
-            <p id="tileName" class="tile-name">
-                ガチャを引いてください
-            </p>
+                <p id="tileName" class="tile-name">
+                    ガチャを引いてください
+                </p>
 
-            <p id="rarity" class="rarity rarity-n">N</p>
+                <p id="rarity" class="rarity rarity-n">
+                    N
+                </p>
+            </div>
+
+            <div
+                id="tenGachaResult"
+                class="ten-gacha-result"
+            ></div>
         </section>
 
         <button id="gachaButton" class="gacha-button">
             ガチャを引く
         </button>
+
+        <button id="tenGachaButton" class="ten-gacha-button">
+            ✨ 10連ガチャ ✨
+        </button>
+
 
         <p class="count-text">
             ガチャ回数：
