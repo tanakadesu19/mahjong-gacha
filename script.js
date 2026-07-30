@@ -40,6 +40,39 @@ const mahjongTiles = [
     { symbol: "🀄", name: "中" }
 ];
 
+const yakumanList = [
+    {
+        name: "国士無双",
+        tiles: [
+            "🀇", "🀏", "🀙", "🀡",
+            "🀐", "🀘", "🀀",
+            "🀁", "🀂", "🀃",
+            "🀆", "🀅", "🀄",
+            "🀇"
+        ]
+    },
+    {
+        name: "大三元",
+        tiles: [
+            "🀆", "🀆", "🀆",
+            "🀅", "🀅", "🀅",
+            "🀄", "🀄", "🀄",
+            "🀇", "🀈", "🀉",
+            "🀀", "🀀"
+        ]
+    },
+    {
+        name: "四暗刻",
+        tiles: [
+            "🀇", "🀇", "🀇",
+            "🀙", "🀙", "🀙",
+            "🀐", "🀐", "🀐",
+            "🀀", "🀀", "🀀",
+            "🀄", "🀄"
+        ]
+    }
+];
+
 const tileElement = document.getElementById("tile");
 const tileNameElement = document.getElementById("tileName");
 const gachaButton = document.getElementById("gachaButton");
@@ -63,6 +96,12 @@ const collectionCountElement = document.getElementById("collectionCount");
 const flashEffect = document.getElementById("flashEffect");
 
 const singleGachaResult = document.getElementById("singleGachaResult");
+
+const yakumanResult = document.getElementById("yakumanResult");
+const yakumanName = document.getElementById("yakumanName");
+const yakumanTiles = document.getElementById("yakumanTiles");
+
+let yakumanFromTenGacha = false;
 
 let gachaCount =
     Number(localStorage.getItem("mahjongGachaCount")) || 0;
@@ -90,11 +129,23 @@ gachaButton.addEventListener("click", function () {
 });
 
 function drawSingleGacha() {
+    const result = drawGachaResult();
 
-    singleGachaResult.style.display = "block";
     tenGachaResult.style.display = "none";
 
-    const result = drawGachaResult();
+    // 役満が出た場合
+    if (result.type === "yakuman") {
+        yakumanFromTenGacha = false;
+
+        singleGachaResult.style.display = "none";
+
+        showYakumanResult(result.yakuman);
+        return;
+    }
+
+    // 通常牌が出た場合
+    yakumanResult.classList.remove("show");
+    singleGachaResult.style.display = "block";
 
     const selectedTile = result.tile;
     const rarity = result.rarity;
@@ -115,13 +166,7 @@ function drawSingleGacha() {
 }
 
 function drawGachaResult() {
-    const randomIndex = Math.floor(
-        Math.random() * mahjongTiles.length
-    );
-
-    const selectedTile = mahjongTiles[randomIndex];
-    const rarity = getRarity();
-
+    // ガチャ回数は、通常牌でも役満でも1回増やす
     gachaCount++;
 
     gachaCountElement.textContent = gachaCount;
@@ -130,6 +175,24 @@ function drawGachaResult() {
         "mahjongGachaCount",
         gachaCount
     );
+
+    // 最初に役満かどうかを抽選する
+    const yakuman = getYakumanResult();
+
+    if (yakuman) {
+        return {
+            type: "yakuman",
+            yakuman: yakuman
+        };
+    }
+
+    // 役満ではなかった場合は通常牌を抽選
+    const randomIndex = Math.floor(
+        Math.random() * mahjongTiles.length
+    );
+
+    const selectedTile = mahjongTiles[randomIndex];
+    const rarity = getRarity();
 
     updateHistory(selectedTile);
 
@@ -144,6 +207,7 @@ function drawGachaResult() {
     updateCollection();
 
     return {
+        type: "tile",
         tile: selectedTile,
         rarity: rarity
     };
@@ -161,19 +225,42 @@ async function drawTenGacha() {
     gachaButton.disabled = true;
 
     singleGachaResult.style.display = "none";
-    tenGachaResult.style.display = "grid";
+    yakumanResult.classList.remove("show");
 
+    tenGachaResult.style.display = "grid";
     tenGachaResult.innerHTML = "";
 
     let highestRarity = "N";
 
+    // 10連の中で出た役満を保存する
+    const obtainedYakuman = [];
+
     for (let i = 0; i < 10; i++) {
         const result = drawGachaResult();
 
-        const item = createTenGachaItem(
-            result.tile,
-            result.rarity
-        );
+        let item;
+
+        // 役満が出た場合
+        if (result.type === "yakuman") {
+            item = createTenYakumanItem(
+                result.yakuman
+            );
+
+            obtainedYakuman.push(
+                result.yakuman
+            );
+        } else {
+            // 通常牌が出た場合
+            item = createTenGachaItem(
+                result.tile,
+                result.rarity
+            );
+
+            highestRarity = compareRarity(
+                highestRarity,
+                result.rarity
+            );
+        }
 
         tenGachaResult.appendChild(item);
 
@@ -181,19 +268,26 @@ async function drawTenGacha() {
 
         item.classList.add("show");
 
-        highestRarity = compareRarity(
-            highestRarity,
-            result.rarity
-        );
-
         await wait(180);
     }
 
+    // 通常牌の中で最も高いレア度の演出
     playFlash(highestRarity);
     playRaritySound(highestRarity);
 
     tenGachaButton.disabled = false;
     gachaButton.disabled = false;
+
+    // 10連に役満が含まれていた場合
+    if (obtainedYakuman.length > 0) {
+        await wait(700);
+
+        yakumanFromTenGacha = true;
+
+        showYakumanResult(
+            obtainedYakuman[0]
+        );
+    }
 }
 
 function createTenGachaItem(tile, rarity) {
@@ -223,6 +317,40 @@ function createTenGachaItem(tile, rarity) {
 
     item.appendChild(tileCard);
     item.appendChild(rarityText);
+
+    return item;
+}
+
+function createTenYakumanItem(yakuman) {
+    const item = document.createElement("div");
+
+    item.classList.add(
+        "ten-gacha-item",
+        "ten-yakuman-item"
+    );
+
+    const yakumanCard =
+        document.createElement("div");
+
+    yakumanCard.classList.add(
+        "ten-gacha-tile",
+        "ten-yakuman-tile"
+    );
+
+    yakumanCard.textContent = "役満";
+
+    const yakumanNameText =
+        document.createElement("p");
+
+    yakumanNameText.classList.add(
+        "ten-yakuman-name"
+    );
+
+    yakumanNameText.textContent =
+        yakuman.name;
+
+    item.appendChild(yakumanCard);
+    item.appendChild(yakumanNameText);
 
     return item;
 }
@@ -663,3 +791,62 @@ function playRaritySound(rarity) {
         });
     }
 }
+
+
+//役満
+function getYakumanResult() {
+    const randomNumber = Math.random() * 100;
+
+    // テスト用：30％で役満
+    if (randomNumber >= 30) {
+        return null;
+    }
+
+    const randomIndex = Math.floor(
+        Math.random() * yakumanList.length
+    );
+
+    return yakumanList[randomIndex];
+}
+
+
+function showYakumanResult(yakuman) {
+    // 通常の結果を非表示にする
+    singleGachaResult.style.display = "none";
+    tenGachaResult.style.display = "none";
+
+    // 前回の役満牌を削除
+    yakumanTiles.innerHTML = "";
+
+    // 役名を表示
+    yakumanName.textContent = yakuman.name;
+
+    // 14枚の牌を作成
+    yakuman.tiles.forEach(function (symbol, index) {
+        const tile = document.createElement("div");
+
+        tile.classList.add("yakuman-tile");
+        tile.textContent = symbol;
+
+        tile.style.animationDelay =
+            `${index * 0.05}s`;
+
+        yakumanTiles.appendChild(tile);
+    });
+
+    // 役満結果を表示
+    yakumanResult.classList.remove("show");
+
+    void yakumanResult.offsetWidth;
+
+    yakumanResult.classList.add("show");
+}
+
+yakumanResult.addEventListener("click", function () {
+    yakumanResult.classList.remove("show");
+
+    if (yakumanFromTenGacha) {
+        tenGachaResult.style.display = "grid";
+        yakumanFromTenGacha = false;
+    }
+});

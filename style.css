@@ -1105,97 +1105,268 @@ h1 {
 }
 
 
+/* =========================
+   役満モーダル
+========================= */
+
+.yakuman-label {
+    margin: 0;
+    color: #ffd54f;
+    font-size: clamp(34px, 8vw, 60px);
+    font-weight: 900;
+    letter-spacing: 0.25em;
+    text-shadow:
+        0 0 10px #ff9800,
+        0 0 25px #f44336;
+}
+
+.yakuman-name {
+    margin: 16px 0 24px;
+    color: #ffffff;
+    font-size: clamp(26px, 7vw, 46px);
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-shadow:
+        0 0 10px #ff5252;
+}
+
+.yakuman-tiles {
+    display: grid;
+    grid-template-columns:
+        repeat(7, minmax(36px, 58px));
+    justify-content: center;
+    gap: 8px;
+    margin: 20px auto;
+}
+
+.yakuman-tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 3 / 4;
+    border: 2px solid #e0b434;
+    border-radius: 7px;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff3c4
+        );
+    font-size: clamp(28px, 6vw, 43px);
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.45),
+        0 0 8px rgba(255, 213, 79, 0.5);
+}
+
+.yakuman-get {
+    margin: 22px 0;
+    color: #ffd54f;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+}
 
 @media (max-width: 500px) {
-    .ten-gacha-result {
+    .yakuman-modal-content {
+        padding: 25px 12px;
+    }
+
+    .yakuman-tiles {
         grid-template-columns:
-            repeat(5, minmax(45px, 60px));
-        gap: 7px;
-    }
-
-    .ten-gacha-tile {
-        width: 48px;
-        height: 66px;
-        font-size: 34px;
-    }
-
-    .ten-gacha-rarity {
-        font-size: 11px;
+            repeat(7, minmax(32px, 44px));
+        gap: 5px;
     }
 }
 
+/* =========================
+   結果エリア内の役満表示
+========================= */
 
-@media (max-width: 600px) {
-    body {
-        padding: 12px;
+.yakuman-result {
+    display: none;
+    width: 100%;
+    padding: 24px 12px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 18px;
+    background:
+        radial-gradient(
+            circle at center,
+            #5a0c0c,
+            #210000 75%
+        );
+    box-shadow:
+        inset 0 0 20px rgba(255, 193, 7, 0.25),
+        0 0 20px rgba(255, 87, 34, 0.45);
+}
+
+.yakuman-result.show {
+    display: block;
+    animation: yakumanResultAppear 0.7s ease;
+}
+
+.yakuman-result-label {
+    margin: 0;
+    color: #ffd54f;
+    font-size: clamp(30px, 7vw, 48px);
+    font-weight: 900;
+    letter-spacing: 0.25em;
+    text-indent: 0.25em;
+    text-shadow:
+        0 0 8px #ff9800,
+        0 0 18px #f44336;
+}
+
+.yakuman-result-name {
+    margin: 12px 0 20px;
+    color: #ffffff;
+    font-size: clamp(26px, 6vw, 42px);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-shadow:
+        0 0 10px #ff5252;
+}
+
+.yakuman-result-tiles {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+
+    width: 100%;
+    margin: 18px auto;
+
+    overflow: hidden;
+}
+
+.yakuman-tile {
+    display: flex;
+    flex: 0 1 46px;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 0;
+    aspect-ratio: 3 / 4;
+
+    border: 2px solid #e0b434;
+    border-radius: 6px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff3c4
+        );
+
+    font-size: clamp(19px, 4.2vw, 38px);
+
+    box-shadow:
+        0 4px 7px rgba(0, 0, 0, 0.4),
+        0 0 7px rgba(255, 213, 79, 0.45);
+
+    opacity: 0;
+
+    animation:
+        yakumanTileAppear
+        0.35s
+        ease
+        forwards;
+}
+
+.yakuman-result-get {
+    margin: 20px 0 0;
+    color: #ffd54f;
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+}
+
+@keyframes yakumanResultAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.85);
     }
 
-    .container {
-        width: 100%;
-        max-width: none;
+    70% {
+        opacity: 1;
+        transform: scale(1.04);
     }
 
-    h1 {
-        font-size: 26px;
-    }
-
-    .tile-display {
-        width: 110px;
-        height: 145px;
-    }
-
-    #tile {
-        font-size: 72px;
-    }
-
-    #gachaButton {
-        width: 100%;
-        max-width: 280px;
-        padding: 14px 20px;
-        font-size: 18px;
-    }
-
-    .history-area,
-    .collection-area {
-        padding: 14px 10px;
-    }
-
-    .collection-list {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 6px;
-    }
-
-    .collection-item {
-        min-width: 0;
-        min-height: 76px;
-        padding: 5px 2px;
-    }
-
-    .collection-symbol {
-        font-size: 31px;
-    }
-
-    .collection-name {
-        font-size: 10px;
-    }
-
-    .rarity-marks {
-        gap: 1px;
-    }
-
-    .rarity-mark {
-        width: 9px;
-        height: 9px;
+    100% {
+        opacity: 1;
+        transform: scale(1);
     }
 }
 
-@media (max-width: 600px) {
-    .tile-modal-content {
-        max-width: 320px;
-        padding: 24px 16px 20px;
+@keyframes yakumanTileAppear {
+    from {
+        opacity: 0;
+        transform:
+            translateY(15px)
+            scale(0.7);
     }
 
-    .modal-tile-symbol {
-        font-size: 78px;
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+.ten-yakuman-item {
+    position: relative;
+}
+
+.ten-yakuman-tile {
+    color: #ffd54f;
+    background:
+        radial-gradient(
+            circle,
+            #8b0000,
+            #240000
+        );
+
+    border: 2px solid #ffd54f;
+
+    font-size: clamp(15px, 3vw, 24px);
+    font-weight: 900;
+
+    text-shadow:
+        0 0 8px #ff9800,
+        0 0 14px #f44336;
+
+    box-shadow:
+        0 0 10px rgba(255, 193, 7, 0.8),
+        0 0 20px rgba(244, 67, 54, 0.5);
+}
+
+.ten-yakuman-name {
+    margin: 5px 0 0;
+
+    color: #ffd54f;
+    font-size: 11px;
+    font-weight: 800;
+
+    line-height: 1.2;
+}
+
+.yakuman-result.show {
+    cursor: pointer;
+}
+
+
+
+@media (max-width: 500px) {
+    .yakuman-result-tiles {
+        gap: 2px;
+    }
+
+    .yakuman-tile {
+        flex-basis: 30px;
+        border-width: 1px;
+        border-radius: 4px;
+        font-size: 21px;
     }
 }
