@@ -124,6 +124,14 @@ const savedRarityCollection =
 
 const rarityCollection = savedRarityCollection;
 
+const savedYakumanCollection =
+    JSON.parse(
+        localStorage.getItem("mahjongYakumanCollection")
+    ) || [];
+
+const collectedYakuman =
+    new Set(savedYakumanCollection);
+
 gachaButton.addEventListener("click", function () {
     drawSingleGacha();
 });
@@ -180,6 +188,9 @@ function drawGachaResult() {
     const yakuman = getYakumanResult();
 
     if (yakuman) {
+        addYakumanToCollection(yakuman);
+        updateHistory(yakuman);
+
         return {
             type: "yakuman",
             yakuman: yakuman
@@ -313,7 +324,7 @@ function createTenGachaItem(tile, rarity) {
         `rarity-${rarity.toLowerCase()}`
     );
 
-    rarityText.textContent = rarity;
+    rarityText.textContent = tile.name;
 
     item.appendChild(tileCard);
     item.appendChild(rarityText);
@@ -382,8 +393,9 @@ function wait(milliseconds) {
     });
 }
 
-function updateHistory(selectedTile) {
-    history.unshift(selectedTile);
+
+function updateHistory(result) {
+    history.unshift(result);
 
     if (history.length > MAX_HISTORY) {
         history.pop();
@@ -391,16 +403,36 @@ function updateHistory(selectedTile) {
 
     historyList.innerHTML = "";
 
-    history.forEach(function (tile) {
+    history.forEach(function (item) {
         const li = document.createElement("li");
 
-        const symbol = document.createElement("span");
-        symbol.classList.add("history-symbol");
-        symbol.textContent = tile.symbol;
+        const symbol =
+            document.createElement("span");
 
-        const name = document.createElement("span");
-        name.classList.add("history-name");
-        name.textContent = tile.name;
+        symbol.classList.add(
+            "history-symbol"
+        );
+
+        const name =
+            document.createElement("span");
+
+        name.classList.add(
+            "history-name"
+        );
+
+        // 通常牌の場合
+        if (item.symbol) {
+            symbol.textContent = item.symbol;
+            name.textContent = item.name;
+        } else {
+            // 役満の場合
+            li.classList.add(
+                "history-yakuman"
+            );
+
+            symbol.textContent = "役満";
+            name.textContent = item.name;
+        }
 
         li.appendChild(symbol);
         li.appendChild(name);
@@ -485,6 +517,23 @@ function saveCollection() {
         "mahjongCollection",
         JSON.stringify(collectionArray)
     );
+}
+
+//役満の保存
+function saveYakumanCollection() {
+    const yakumanArray =
+        Array.from(collectedYakuman);
+
+    localStorage.setItem(
+        "mahjongYakumanCollection",
+        JSON.stringify(yakumanArray)
+    );
+}
+
+function addYakumanToCollection(yakuman) {
+    collectedYakuman.add(yakuman.name);
+
+    saveYakumanCollection();
 }
 
 //レア度保存用の関数

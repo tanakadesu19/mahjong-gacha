@@ -1357,6 +1357,38 @@ h1 {
 }
 
 
+/*役満履歴用*/
+.history-yakuman {
+    border: 1px solid #d4af37;
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3a0000,
+            #750000
+        );
+
+    box-shadow:
+        0 0 8px
+        rgba(255, 193, 7, 0.35);
+}
+
+.history-yakuman .history-symbol {
+    color: #ffd54f;
+    font-size: 13px;
+    font-weight: 900;
+
+    text-shadow:
+        0 0 5px #ff9800;
+}
+
+.history-yakuman .history-name {
+    color: #ffd54f;
+    font-weight: 800;
+}
+
+
 
 @media (max-width: 500px) {
     .yakuman-result-tiles {
