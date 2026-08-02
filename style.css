@@ -204,21 +204,6 @@ h1 {
     }
 }
 
-@media (max-width: 400px) {
-    .container {
-        padding-top: 25px;
-    }
-
-    .tile {
-        width: 120px;
-        height: 160px;
-        font-size: 82px;
-    }
-
-    .gacha-button {
-        font-size: 21px;
-    }
-}
 
 /*図鑑*/
 .collection-area {
@@ -1166,18 +1151,6 @@ h1 {
     letter-spacing: 0.14em;
 }
 
-@media (max-width: 500px) {
-    .yakuman-modal-content {
-        padding: 25px 12px;
-    }
-
-    .yakuman-tiles {
-        grid-template-columns:
-            repeat(7, minmax(32px, 44px));
-        gap: 5px;
-    }
-}
-
 /* =========================
    結果エリア内の役満表示
 ========================= */
@@ -1389,16 +1362,242 @@ h1 {
 }
 
 
+/*役満図鑑*/
+.collection-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
 
-@media (max-width: 500px) {
-    .yakuman-result-tiles {
-        gap: 2px;
+.collection-tab {
+    min-width: 110px;
+    padding: 10px 18px;
+
+    border: 2px solid #b8b8b8;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: #555555;
+
+    font-size: 16px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.25s,
+        color 0.25s,
+        border-color 0.25s,
+        transform 0.2s,
+        box-shadow 0.25s;
+}
+
+.collection-tab:hover {
+    transform: translateY(-2px);
+}
+
+.collection-tab.active {
+    border-color: #d4af37;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff4bd,
+            #e5b93f
+        );
+
+    color: #4f3700;
+
+    box-shadow:
+        0 4px 12px
+        rgba(212, 175, 55, 0.3);
+}
+
+.collection-count {
+    margin: 0 0 14px;
+
+    text-align: center;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.collection-panel {
+    display: none;
+    opacity: 0;
+    transform: translateY(6px);
+}
+
+.collection-panel.active {
+    display: block;
+
+    animation:
+        collectionPanelFade 0.3s ease forwards;
+}
+
+@keyframes collectionPanelFade {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
     }
 
-    .yakuman-tile {
-        flex-basis: 30px;
-        border-width: 1px;
-        border-radius: 4px;
-        font-size: 21px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
+}
+
+
+/* =========================
+   役図鑑カード
+========================= */
+
+.yakuman-collection {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+}
+
+.yakuman-collection-item {
+    min-height: 105px;
+    padding: 16px 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #760d0d,
+            #300000
+        );
+
+    border: 2px solid #d4af37;
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 0 #7a5b00,
+        0 8px 14px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.yakuman-collection-item:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 7px 0 #7a5b00,
+        0 11px 18px rgba(0, 0, 0, 0.3);
+}
+
+.yakuman-collection-name {
+    margin: 0;
+
+    color: #ffd54f;
+    font-size: 18px;
+    font-weight: 900;
+
+    text-shadow:
+        0 0 6px rgba(255, 152, 0, 0.8);
+}
+
+.yakuman-collection-status {
+    margin: 10px 0 0;
+
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.yakuman-collection-item.locked {
+    background:
+        linear-gradient(
+            145deg,
+            #d8d8d8,
+            #aaaaaa
+        );
+
+    border-color: #888888;
+
+    box-shadow:
+        0 5px 0 #666666,
+        0 8px 14px rgba(0, 0, 0, 0.2);
+
+    cursor: default;
+}
+
+.yakuman-collection-item.locked:hover {
+    transform: none;
+}
+
+.yakuman-collection-item.locked
+.yakuman-collection-name {
+    color: #666666;
+    text-shadow: none;
+}
+
+.yakuman-collection-item.locked
+.yakuman-collection-status {
+    color: #555555;
+}
+
+
+/*役図鑑詳細*/
+.yakuman-detail-content {
+    position: relative;
+    width: min(95%, 700px);
+    padding: 28px 18px 24px;
+    text-align: center;
+    background:
+        radial-gradient(
+            circle at center,
+            #5a0c0c,
+            #210000 75%
+        );
+    border: 4px solid #d4af37;
+    border-radius: 18px;
+    box-shadow:
+        0 0 20px rgba(255, 193, 7, 0.65),
+        0 14px 35px rgba(0, 0, 0, 0.45);
+}
+
+.yakuman-detail-content .modal-title {
+    color: #ffd54f;
+    text-shadow:
+        0 0 7px #ff9800;
+}
+
+.yakuman-detail-tiles {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    margin-top: 22px;
+}
+
+.yakuman-detail-tile {
+    display: flex;
+    flex: 0 1 46px;
+    min-width: 0;
+    aspect-ratio: 3 / 4;
+    align-items: center;
+    justify-content: center;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff3c4
+        );
+    border: 2px solid #e0b434;
+    border-radius: 6px;
+    font-size: clamp(19px, 4vw, 38px);
+    box-shadow:
+        0 4px 7px rgba(0, 0, 0, 0.4);
 }

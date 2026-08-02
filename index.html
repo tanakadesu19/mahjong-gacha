@@ -87,15 +87,35 @@
         </section>
 
         <section class="collection-area">
-            <h2>牌図鑑</h2>
+            <div class="collection-tabs">
+                <button
+                    id="tileCollectionTab"
+                    class="collection-tab active"
+                    type="button"
+                >
+                    牌図鑑
+                </button>
 
-            <p class="collection-count">
-                収集数：
-                <span id="collectionCount">0</span>
-                / 34
+                <button
+                    id="yakumanCollectionTab"
+                    class="collection-tab"
+                    type="button"
+                >
+                    役図鑑
+                </button>
+            </div>
+
+            <p id="collectionCount" class="collection-count">
+                収集数：0 / 34
             </p>
 
-            <div id="collectionList" class="collection-list"></div>
+            <div id="tileCollectionPanel" class="collection-panel active">
+                <div id="collection" class="collection-list"></div>
+            </div>
+
+            <div id="yakumanCollectionPanel" class="collection-panel">
+                <div id="yakumanCollection" class="yakuman-collection"></div>
+            </div>
         </section>
 
         
@@ -116,6 +136,30 @@
 
             <div id="modalRarityList" class="modal-rarity-list">
             </div>
+        </div>
+    </div>
+
+    <!-- 役図鑑の詳細ポップアップ -->
+    <div id="yakumanDetailModal" class="tile-modal">
+        <div class="yakuman-detail-content">
+            <button
+                id="closeYakumanDetailButton"
+                class="modal-close-button"
+            >
+                ×
+            </button>
+
+            <h2
+                id="yakumanDetailName"
+                class="modal-title"
+            >
+                国士無双
+            </h2>
+
+            <div
+                id="yakumanDetailTiles"
+                class="yakuman-detail-tiles"
+            ></div>
         </div>
     </div>
 

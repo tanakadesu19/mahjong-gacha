@@ -89,7 +89,7 @@ const modalRarityList = document.getElementById("modalRarityList");
 const closeModalButton = document.getElementById("closeModalButton");
 const modalTileName = document.getElementById("modalTileName");
 
-const collectionList = document.getElementById("collectionList");
+const collectionList = document.getElementById("collection");
 
 const collectionCountElement = document.getElementById("collectionCount");
 
@@ -100,6 +100,19 @@ const singleGachaResult = document.getElementById("singleGachaResult");
 const yakumanResult = document.getElementById("yakumanResult");
 const yakumanName = document.getElementById("yakumanName");
 const yakumanTiles = document.getElementById("yakumanTiles");
+
+const tileCollectionTab = document.getElementById("tileCollectionTab");
+const yakumanCollectionTab = document.getElementById("yakumanCollectionTab");
+const tileCollectionPanel = document.getElementById("tileCollectionPanel");
+const yakumanCollectionPanel = document.getElementById("yakumanCollectionPanel");
+const collectionCount = document.getElementById("collectionCount");
+
+const yakumanCollection = document.getElementById("yakumanCollection");
+
+const yakumanDetailModal = document.getElementById("yakumanDetailModal");
+const yakumanDetailName = document.getElementById("yakumanDetailName");
+const yakumanDetailTiles = document.getElementById("yakumanDetailTiles");
+const closeYakumanDetailButton = document.getElementById("closeYakumanDetailButton");
 
 let yakumanFromTenGacha = false;
 
@@ -505,8 +518,7 @@ function updateCollection() {
         collectionList.appendChild(item);
     });
 
-    collectionCountElement.textContent =
-        collectedTiles.size;
+    updateTileCollectionCount();
 }
 
 //図鑑の保存
@@ -534,6 +546,7 @@ function addYakumanToCollection(yakuman) {
     collectedYakuman.add(yakuman.name);
 
     saveYakumanCollection();
+    updateYakumanCollection();
 }
 
 //レア度保存用の関数
@@ -668,6 +681,30 @@ function openTileModal(tileIndex) {
     tileModal.classList.add("open");
 }
 
+//役図鑑詳細を開く関数
+function openYakumanDetail(yakuman) {
+    yakumanDetailName.textContent =
+        yakuman.name;
+
+    yakumanDetailTiles.innerHTML = "";
+
+    yakuman.tiles.forEach(function (symbol) {
+        const tile =
+            document.createElement("div");
+
+        tile.classList.add(
+            "yakuman-detail-tile"
+        );
+
+        tile.textContent = symbol;
+
+        yakumanDetailTiles.appendChild(tile);
+    });
+
+    yakumanDetailModal.classList.add("open");
+}
+
+
 closeModalButton.addEventListener("click", () => {
     tileModal.classList.remove("open");
 });
@@ -681,6 +718,7 @@ tileModal.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
         tileModal.classList.remove("open");
+        yakumanDetailModal.classList.remove("open");
     }
 });
 
@@ -899,3 +937,133 @@ yakumanResult.addEventListener("click", function () {
         yakumanFromTenGacha = false;
     }
 });
+
+
+//役満図鑑
+function switchCollectionTab(tabName) {
+    const isTileTab = tabName === "tile";
+
+    tileCollectionTab.classList.toggle(
+        "active",
+        isTileTab
+    );
+
+    yakumanCollectionTab.classList.toggle(
+        "active",
+        !isTileTab
+    );
+
+    tileCollectionPanel.classList.toggle(
+        "active",
+        isTileTab
+    );
+
+    yakumanCollectionPanel.classList.toggle(
+        "active",
+        !isTileTab
+    );
+
+    if (isTileTab) {
+        updateTileCollectionCount();
+    } else {
+        updateYakumanCollectionCount();
+    }
+}
+
+tileCollectionTab.addEventListener(
+    "click",
+    function () {
+        switchCollectionTab("tile");
+    }
+);
+
+yakumanCollectionTab.addEventListener(
+    "click",
+    function () {
+        switchCollectionTab("yakuman");
+    }
+);
+
+
+function updateTileCollectionCount() {
+    collectionCount.textContent =
+        `収集数：${collectedTiles.size} / ${mahjongTiles.length}`;
+}
+
+function updateYakumanCollectionCount() {
+    collectionCount.textContent =
+        `収集数：${collectedYakuman.size} / ${yakumanList.length}`;
+}
+
+switchCollectionTab("tile");
+
+function updateYakumanCollection() {
+    yakumanCollection.innerHTML = "";
+
+    yakumanList.forEach(function (yakuman) {
+        const item = document.createElement("div");
+
+        item.classList.add("yakuman-collection-item");
+
+        const isCollected =
+            collectedYakuman.has(yakuman.name);
+
+        if (isCollected) {
+            item.addEventListener("click", function () {
+                openYakumanDetail(yakuman);
+            });
+        } else {
+            item.classList.add("locked");
+        }
+
+        const name =
+            document.createElement("p");
+
+        name.classList.add(
+            "yakuman-collection-name"
+        );
+
+        const status =
+            document.createElement("p");
+
+        status.classList.add(
+            "yakuman-collection-status"
+        );
+
+        if (isCollected) {
+            name.textContent = yakuman.name;
+            status.textContent = "取得済み";
+        } else {
+            name.textContent = "？？？";
+            status.textContent = "未取得";
+        }
+
+        item.appendChild(name);
+        item.appendChild(status);
+
+        yakumanCollection.appendChild(item);
+    });
+
+    updateYakumanCollectionCount();
+}
+
+updateCollection();
+updateYakumanCollection();
+switchCollectionTab("tile");
+
+//役の詳細を閉じる
+closeYakumanDetailButton.addEventListener(
+    "click",
+    function () {
+        yakumanDetailModal.classList.remove("open");
+    }
+);
+
+yakumanDetailModal.addEventListener(
+    "click",
+    function (event) {
+        if (event.target === yakumanDetailModal) {
+            yakumanDetailModal.classList.remove("open");
+        }
+    }
+);
