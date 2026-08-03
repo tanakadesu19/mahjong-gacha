@@ -1143,6 +1143,11 @@ function createTenYakuItem(yaku) {
     item.appendChild(yakuCard);
     item.appendChild(yakuNameText);
 
+    // ここを追加
+    item.addEventListener("click", function () {
+        openYakumanDetail(yaku);
+    });
+
     return item;
 }
 

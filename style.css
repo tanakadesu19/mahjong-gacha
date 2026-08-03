@@ -1868,3 +1868,46 @@ h1 {
 
     letter-spacing: 2px;
 }
+
+.ten-yaku-item {
+    cursor: pointer;
+}
+
+.ten-yaku-item:hover {
+    transform: translateY(-3px);
+}
+
+.ten-yaku-item:active {
+    transform: translateY(1px);
+}
+
+.ten-yaku-item {
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        filter 0.18s ease;
+}
+
+.ten-yaku-item.show:hover {
+    filter: brightness(1.06);
+}
+
+.ten-yaku-item.show:active {
+    transform: translateY(1px);
+}
+
+.ten-yaku-item .ten-yaku-tile {
+    transition:
+        transform 0.18s ease,
+        filter 0.18s ease;
+}
+
+.ten-yaku-item:hover .ten-yaku-tile {
+    transform: translateY(-4px);
+    filter: brightness(1.08);
+}
+
+.ten-yaku-item:active .ten-yaku-tile {
+    transform: translateY(1px);
+}
