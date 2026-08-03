@@ -1348,16 +1348,48 @@ h1 {
 }
 
 .history-yakuman .history-symbol {
-    color: #ffd54f;
-    font-size: 13px;
-    font-weight: 900;
+    display: inline-flex;
 
-    text-shadow:
-        0 0 5px #ff9800;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 44px;
+    padding: 3px 8px;
+
+    border-radius: 999px;
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.history-yakuman[data-category="1翻"] .history-symbol {
+    background: #2e8b57;
+}
+
+.history-yakuman[data-category="2翻"] .history-symbol {
+    background: #2878b8;
+}
+
+.history-yakuman[data-category="3翻"] .history-symbol {
+    background: #7b4ab8;
+}
+
+.history-yakuman[data-category="役満"] .history-symbol {
+    background: linear-gradient(
+        135deg,
+        #8b0000,
+        #2a0000
+    );
+
+    color: #ffd54f;
+
+    border: 1px solid #ffd54f;
 }
 
 .history-yakuman .history-name {
-    color: #ffd54f;
+    color: #f1bd14;
     font-weight: 800;
 }
 
@@ -1600,4 +1632,239 @@ h1 {
     font-size: clamp(19px, 4vw, 38px);
     box-shadow:
         0 4px 7px rgba(0, 0, 0, 0.4);
+}
+
+
+/* 一般役の結果 */
+.yakuman-result.normal-yaku-result {
+    background:
+        radial-gradient(
+            circle at center,
+            #164d36,
+            #08291c 75%
+        );
+
+    box-shadow:
+        inset 0 0 20px
+        rgba(255, 255, 255, 0.15),
+        0 0 20px
+        rgba(76, 175, 80, 0.4);
+}
+
+/* 役満の結果 */
+.yakuman-result.yakuman-result-style {
+    background:
+        radial-gradient(
+            circle at center,
+            #5a0c0c,
+            #210000 75%
+        );
+
+    box-shadow:
+        inset 0 0 20px
+        rgba(255, 193, 7, 0.25),
+        0 0 20px
+        rgba(255, 87, 34, 0.45);
+}
+
+/* 10連の一般役 */
+.ten-yaku-tile.normal-yaku {
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2e8b57,
+            #174d32
+        );
+
+    border: 2px solid #8fd3aa;
+
+    font-size: 17px;
+    font-weight: 900;
+}
+
+/* 10連の役満 */
+.ten-yaku-tile.yakuman {
+    color: #ffd54f;
+
+    background:
+        radial-gradient(
+            circle,
+            #8b0000,
+            #240000
+        );
+
+    border: 2px solid #ffd54f;
+
+    font-size: 17px;
+    font-weight: 900;
+
+    text-shadow:
+        0 0 8px #ff9800;
+}
+
+.ten-yaku-name {
+    margin: 5px 0 0;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+
+
+.yaku-collection-top {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.yaku-collection-category {
+    flex-shrink: 0;
+    padding: 3px 8px;
+
+    color: #4f3700;
+    background: #ffd54f;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.yaku-collection-tiles {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 1px;
+    margin-top: 12px;
+    overflow: hidden;
+}
+
+.yaku-collection-tile {
+    display: inline-flex;
+    flex: 0 1 24px;
+    min-width: 0;
+    aspect-ratio: 3 / 4;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #111111;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff3c4
+        );
+
+    border: 1px solid #d4af37;
+    border-radius: 3px;
+
+    font-size: 18px;
+    line-height: 1;
+}
+
+.yaku-collection-tile.locked {
+    color: #777777;
+    background: #cccccc;
+    border-color: #999999;
+}
+
+.yakuman-detail-category {
+    display: inline-block;
+    margin: 10px 0 4px;
+    padding: 5px 14px;
+
+    color: #4f3700;
+    background:
+        linear-gradient(
+            135deg,
+            #fff4bd,
+            #e5b93f
+        );
+
+    border-radius: 999px;
+
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.yakuman-detail-description {
+    max-width: 540px;
+    margin: 22px auto 0;
+
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.8;
+
+    text-align: left;
+}
+
+
+/*役図鑑カード色分け*/
+.yaku-collection-category.category-1han {
+    color: #ffffff;
+    background: #2e8b57;
+}
+
+.yaku-collection-category.category-2han {
+    color: #ffffff;
+    background: #2878b8;
+}
+
+.yaku-collection-category.category-high {
+    color: #ffffff;
+    background: #7b4ab8;
+}
+
+.yaku-collection-category.category-yakuman {
+    color: #ffd54f;
+    background:
+        linear-gradient(
+            135deg,
+            #7a0000,
+            #2a0000
+        );
+    border: 1px solid #ffd54f;
+    text-shadow:
+        0 0 5px #ff9800;
+}
+
+
+.yakuman-detail-description {
+    white-space: pre-line;
+}
+
+
+/*読み仮名*/
+.modal-reading{
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 540;
+
+    color: #353535;
+
+    letter-spacing: 2px;
+}
+
+.modal-title{
+    margin-top: 2px;
+}
+
+.yaku-reading{
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #64b5f6;   /* 好きな色 */
+
+    letter-spacing: 2px;
 }
